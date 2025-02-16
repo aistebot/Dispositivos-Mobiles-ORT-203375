@@ -7,6 +7,8 @@ const ACTIVIDADES = document.querySelector("#pantalla-actividades");
 const NAV = document.querySelector("ion-nav");
 const URL_BASE = "https://movetrack.develotion.com/";
 
+let listaActividades = [];
+ 
 Inicio();
 
 
@@ -70,28 +72,39 @@ function TomarDatosLogin() {
         },
         body: JSON.stringify(usuario),
     }).then(function (response) {
-
-        console.log(response);
         return response.json();
 
     }).then(function (data) {
-        console.log(data);
         if (data.codigo == "200") {
             localStorage.setItem("apiKey", data.apiKey);
             localStorage.setItem("idUser", data.id);
             ArmarMenu();
+            GuardarListaActividades();
             NAV.push("page-home");
         } else {
             document.querySelector("#label-respuesta-login").innerHTML = data.mensaje;
         }
         ApagarLoading();
     })
-
-
-
-
 }
 
+function GuardarListaActividades(){
+    let apikey = localStorage.getItem("apiKey");
+    let idUser = localStorage.getItem("idUser");
+    fetch(`${URL_BASE}actividades.php`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey' : apikey,
+            'iduser' : idUser
+        },
+        }).then(function (response){
+            return response.json();
+        })
+        .then(function (response){
+            listaActividades = response.actividades;
+        })
+}
 
 
 
@@ -115,15 +128,12 @@ function TomarDatosRegistro() {
         },
         body: JSON.stringify(usuario),
     }).then(function (response) {
-        console.log(response);
-
         return response.json();
 
 
     }).then(function (data) {
 
         ApagarLoading();
-        console.log(data);
         if (data.codigo == "200") {
             MostrarToast("Usuario registrado correctamente, inicie sesion para ingresar en el sistema", 3000);
         }
@@ -142,7 +152,6 @@ function TomarDatosRegistro() {
 }
 
 function Navegar(evt) {
-    console.log(evt);
     OcultarPantallas();
 
     let ruta = evt.detail.to;
@@ -176,8 +185,6 @@ function OcultarPantallas() {
 function CerrarMenu() {
     MENU.close();
 }
-
-
 
 
 const loading = document.createElement('ion-loading');
@@ -226,8 +233,10 @@ function ListarPorFecha() {
     let tabla = '';
     let apikey = localStorage.getItem("apiKey");
     let idUser = localStorage.getItem("idUser");
-    console.log(fecha);
-    console.log(localStorage.idUser);
+    const hoy = new Date(); // Fecha actual
+    const sieteDias = new Date(hoy.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const treintaDias = new Date(hoy.getTime() - 30 * 24 * 60 * 60 * 1000);
+
     fetch(`${URL_BASE}registros.php?idUsuario=${localStorage.idUser}`, {
         method: 'GET',
         headers: {
@@ -236,25 +245,76 @@ function ListarPorFecha() {
             'iduser' : idUser
         },
     }).then(function (response){
-            console.log(response);
             return response.json();
         })
         .then(function (listAct){
-            console.log(listAct);
-            if(fecha === 'all'){
-                for(let l of listAct.registros) {
-                    tabla += `<ion-row>
-                      <ion-col> <img src="https://movetrack.develotion.com/imgs/${l.idActividad}.png" width="40"> FALTA NOMBRE ACTIVIDAD</ion-col>
-                      <ion-col>${l.tiempo} segundos</ion-col>
-                      <ion-col>${l.fecha}</ion-col>
-                      <ion-col><ion-button expand="full" id="eliminarActividad${l.id}">Eliminar</ion-button></ion-col></ion-row>
-                      `
-                }
+            if(listAct.codigo === 401){
+                Alertar("Sesion expirada", 'La sesion ha expirado. Vueldo a iniciar sesion.');
+                CerrarSesion();
+            }else{
+                if(fecha === 'all'){
+                    for(let l of listAct.registros) {
+                        let nombreAct = TraerNombreActividad(l.idActividad);
+                        let imagen = TraerImagenActividad(l.idActividad);
+                        tabla += `<ion-row>
+                        <ion-col> <img src="https://movetrack.develotion.com/imgs/${imagen}.png" width="40"> ${nombreAct}</ion-col>
+                        <ion-col>${l.tiempo} segundos</ion-col>
+                        <ion-col>${l.fecha}</ion-col>
+                        <ion-col><ion-button expand="full" id="eliminarActividad${l.id}">Eliminar</ion-button></ion-col></ion-row>
+                        `
+                    }
 
-                document.querySelector("#listAct").innerHTML = tabla;
-                console.log(tabla);
+                    document.querySelector("#listAct").innerHTML = tabla;
+                    console.log(tabla);
+                } else if(fecha ==="week") {
+                    for(let l of listAct.registros) {
+                        let fecha = new Date(l.fecha);
+                        if(fecha >= sieteDias && fecha <= hoy ){
+                            let nombreAct = TraerNombreActividad(l.idActividad);
+                            let imagen = TraerImagenActividad(l.idActividad);
+                            tabla += `<ion-row>
+                            <ion-col> <img src="https://movetrack.develotion.com/imgs/${imagen}.png" width="40"> ${nombreAct}</ion-col>
+                            <ion-col>${l.tiempo} segundos</ion-col>
+                            <ion-col>${l.fecha}</ion-col>
+                            <ion-col><ion-button expand="full" id="eliminarActividad${l.id}">Eliminar</ion-button></ion-col></ion-row>
+                            `
+                        }
+                    }
+                    document.querySelector("#listAct").innerHTML = tabla;
+                } else if(fecha ==="mounth") {
+                    for(let l of listAct.registros) {
+                        let fecha = new Date(l.fecha);
+                        if(fecha >= treintaDias && fecha <= hoy ){
+                            let nombreAct = TraerNombreActividad(l.idActividad);
+                            let imagen = TraerImagenActividad(l.idActividad);
+                            tabla += `<ion-row>
+                            <ion-col> <img src="https://movetrack.develotion.com/imgs/${imagen}.png" width="40"> ${nombreAct}</ion-col>
+                            <ion-col>${l.tiempo} segundos</ion-col>
+                            <ion-col>${l.fecha}</ion-col>
+                            <ion-col><ion-button expand="full" id="eliminarActividad${l.id}">Eliminar</ion-button></ion-col></ion-row>
+                            `
+                        }
+                    }
+                    document.querySelector("#listAct").innerHTML = tabla;
+                }
             }
         })
     
 
+}
+
+function TraerNombreActividad (id){
+    for (l of listaActividades) {
+        if(id===Number(l.id)){
+            return l.nombre;
+        }
+    }
+}
+
+function TraerImagenActividad (id){
+    for (l of listaActividades) {
+        if(id===l.id){
+            return l.imagen;
+        }
+    }
 }
