@@ -1,0 +1,29 @@
+ion-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #135d54;
+    color: #fff;
+    padding: 10px;
+  }
+
+  #listAct ion-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: transparent;
+    color: #666;
+  }
+  #listAct ion-row:nth-child(2n+1) {
+    background-color: white;
+  }
+
+  #listAct ion-row:nth-child(2n) {
+    background-color: #eaeaea;
+  }
+
+  .tablaActividades {
+    padding: 0px;
+  }

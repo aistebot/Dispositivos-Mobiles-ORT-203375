@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <ion-app>
+        <!-- Componente de ruteo -->
+        <ion-router id="ruteo">
+            <ion-route url="/" component="page-home"></ion-route>
+            <ion-route url="/login" component="page-login"></ion-route>
+            <ion-route url="/registro" component="page-registro"></ion-route>
+            <ion-route url="/actividades" component="page-actividades"></ion-route>
+
+        </ion-router>
+        <ion-nav></ion-nav>
+
+
+        <!-- MENU -->
+        <ion-menu side="start" menu-id="first" content-id="main" id="menu">
+            <ion-header>
+                <ion-toolbar color="primary">
+                    <iont-title>Menu de inicio</iont-title>
+                </ion-toolbar>
+            </ion-header>
+
+            <ion-content>
+                <ion-list id="menu-opciones">
+
+                </ion-list>
+            </ion-content>
+        </ion-menu>
+        <div id="main"></div>
+
+        <!-- HOME ----------------------------------------------------------->
+        <page-home class="ion-page" id="pantalla-home">
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>HOME</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+
+       
+                <hr>
+                <ion-datetime-button id="dateEventoFecha" datetime="datetime"></ion-datetime-button>
+                <ion-modal>
+                    <ion-datetime id="datetime" presentation = "date"></ion-datetime>
+                </ion-modal>
+
+            </ion-content>
+        </page-home>
+
+        <!-- LOGIN ----------------------------------------------------------->
+        <page-login class="ion-page" id="pantalla-login">
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>LOGIN</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+
+
+                <ion-list>
+
+                    <ion-item>
+                        <ion-input label="Usuario" id="inputUser" label-placement="floating"
+                            placeholder="Usuario"></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-input label="Password" id="inputPassword" type="Password" label-placement="floating"
+                            placeholder="Password"></ion-input>
+                    </ion-item>
+                </ion-list>
+
+                <ion-button expand="full" id="btnLogin">Login</ion-button>
+                <ion-label id="label-respuesta-login"></ion-label>
+
+
+            </ion-content>
+        </page-login>
+
+
+
+        <!-- ACTIVIDADES ----------------------------------------------------------->
+
+        <page-actividades class="ion-page" id="pantalla-actividades">
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Mis Actividades</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content id="lista-actividades">
+                <ion-list>
+                    <ion-item>
+                        <ion-select label="Ver actividad de..." placeholder="Una opcion" id="filtroFecha">
+                            <ion-select-option value="week">Ultima semana</ion-select-option>
+                            <ion-select-option value="mounth">Ultimo mes</ion-select-option>
+                            <ion-select-option value="all">Todas las actividades</ion-select-option>
+                        </ion-select>
+                        <ion-button expand="full" id="btnListar">Ver listado</ion-button>
+                      </ion-item>
+                </ion-list>
+                <ion-grid class="tablaActividades">
+                    <ion-row>
+                      <ion-col>Tipo de Actividad</ion-col>
+                      <ion-col>Tiempo realizado (segudnos)</ion-col>
+                      <ion-col>Fecha de Realizacion</ion-col>
+                      <ion-col>Eliminar</ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid id="listAct" class="tablaActividades">
+                    <ion-row>
+                        <ion-col>Tipo de Actividad</ion-col>
+                        <ion-col>Tiempo realizado (segudnos)</ion-col>
+                        <ion-col>Fecha de Realizacion</ion-col>
+                        <ion-col>Eliminar</ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>Tipo de Actividad</ion-col>
+                        <ion-col>Tiempo realizado (segudnos)</ion-col>
+                        <ion-col>Fecha de Realizacion</ion-col>
+                        <ion-col>Eliminar</ion-col>
+                      </ion-row>
+                </ion-grid>
+
+            </ion-content>
+        </page-actividades>
+
+
+        <!-- REGISTRO ----------------------------------------------------------->
+        <page-registro class="ion-page" id="pantalla-registro">
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Registro</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+
+                <ion-list>
+                    <ion-item>
+                        <ion-input label="Nombre de Usuario" id="inputRegUser" label-placement="floating"
+                            placeholder="Nombre de Usuario"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input label="Contraseña" id="inputRegPass" label-placement="floating" type="Password"
+                            placeholder="Contraseña"></ion-input>
+                    </ion-item>
+                    <ion-item> <!-------IMPORTANTE ESTO TIENE QUE SER UN SELECT---------------->
+                        <ion-input label="Pais de Origen" id="inputRegIdP" label-placement="floating"
+                            placeholder="Pais de Origen"></ion-input>
+                    </ion-item>
+                </ion-list>
+
+                <ion-button expand="full" id="btnRegistro">Registrar</ion-button>
+                <ion-label id="label-respuesta-registro"></ion-label>
+
+            </ion-content>
+        </page-registro>
+
+
+
+
+
+
+
+
+
+    </ion-app>
+    <script src="js/code.js"></script>
+</body>
+
+</html>

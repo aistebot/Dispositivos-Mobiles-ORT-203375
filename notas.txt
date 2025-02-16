@@ -1,0 +1,98 @@
+
+apikey: e7bf6a8edeb41818a62341b8769aefe0
+iduser: 2
+
+
+datos testeo
+user: aistebot111
+pass: aistebot
+id: 2883
+
+----------------------------------------
+Paises PHP
+
+    "codigo": 200,
+    "paises": [
+        {
+            "id": 11,
+            "name": "Argentina",
+            "currency": "ARS",
+            "latitude": -34,
+            "longitude": -64
+        }
+    ]
+
+
+----------------------------------------
+Usuarios por Paises
+
+    "paises": [
+        {
+            "id": 1,
+            "name": "Afghanistan",
+            "cantidadDeUsuarios": 14
+        },
+    ]
+
+----------------------------------------
+REGISTROS OBTENIDOS
+
+    "registros": [
+        {
+            "id": 8,
+            "idActividad": 8,
+            "idUsuario": 7,
+            "tiempo": 200,
+            "fecha": "2023-09-21"
+        },
+    ]
+
+----------------------------------------
+ACTIVIDADES
+
+    {
+    "codigo": 200,
+    "actividades": [
+        {
+            "id": 1,
+            "nombre": "Caminata",
+            "imagen": 5
+        },
+        {
+            "id": 2,
+            "nombre": "Pesas",
+            "imagen": 6
+        },
+        {
+            "id": 4,
+            "nombre": "Fútbol",
+            "imagen": 2
+        },
+        {
+            "id": 5,
+            "nombre": "Natación",
+            "imagen": 1
+        },
+        {
+            "id": 6,
+            "nombre": "HIIT",
+            "imagen": 6
+        },
+        {
+            "id": 7,
+            "nombre": "Correr",
+            "imagen": 5
+        },
+        {
+            "id": 8,
+            "nombre": "Bicicleta",
+            "imagen": 4
+        },
+        {
+            "id": 9,
+            "nombre": "Basketball",
+            "imagen": 3
+        }
+    ]
+}
+
