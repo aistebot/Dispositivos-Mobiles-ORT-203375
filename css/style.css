@@ -8,7 +8,9 @@ ion-col {
     padding: 10px;
   }
 
-  #listAct ion-col {
+  #listAct ion-col,
+  #tablaTiemposGeneral ion-col
+   {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,14 +18,22 @@ ion-col {
     background-color: transparent;
     color: #666;
   }
-  #listAct ion-row:nth-child(2n+1) {
+  #listAct ion-row:nth-child(2n+1),
+  #tablaTiemposGeneral ion-row:nth-child(2n+1) {
     background-color: white;
   }
 
-  #listAct ion-row:nth-child(2n) {
+  #listAct ion-row:nth-child(2n),
+  #tablaTiemposGeneral ion-row:nth-child(2n+1) {
     background-color: #eaeaea;
   }
 
-  .tablaActividades {
+  .tablaActividades,
+  .tablaGeneral {
     padding: 0px;
+  }
+
+  #map { 
+    height: 800px;
+    width: 100%; 
   }
