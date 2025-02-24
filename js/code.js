@@ -105,7 +105,7 @@ function Eventos() {
     document.querySelector("#btnAddActividad").addEventListener('click', AgregarActividad);
 }
 
-function Navegar(evt) {
+async function Navegar(evt) {
     OcultarPantallas();
 
     let ruta = evt.detail.to;
@@ -120,9 +120,11 @@ function Navegar(evt) {
     } else if (ruta == "/actividades") {
         ACTIVIDADES.style.display = "block";
         DatosGenerales();
+        await GuardarListaActividades();
     }else if (ruta == "/addactividades") {
         ADDACTIVIDADES.style.display = "block";
         SelectActividades();
+        await GuardarListaActividades();
     }else if (ruta == "/mapa") {
         MAPA.style.display = "block";
         MostrarMapa();
