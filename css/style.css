@@ -37,3 +37,7 @@ ion-col {
     height: 800px;
     width: 100%; 
   }
+
+  .ion-page ion-content {
+    padding: 10px;
+  }

@@ -220,40 +220,42 @@ function TomarDatosRegistro() {
     let user = document.querySelector("#inputRegUser").value;
     let pass = document.querySelector("#inputRegPass").value;
     let idPais = Number(document.querySelector("#inputRegIdP").value);
+    if(user.length < 1 || user.length < 1 || idPais == NaN) {
+        MostrarToast("ERROR! Verifica que el usuario, contraseña y País no esten vacios", 3000);
+    }else{
+
+        let usuario = new Object();
+        usuario.usuario = user;
+        usuario.password = pass;
+        usuario.idPais = idPais;
+
+        PrenderLoading("Registrando usuario")
+        fetch(`${URL_BASE}usuarios.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(usuario),
+        }).then(function (response) {
+            return response.json();
 
 
-    let usuario = new Object();
-    usuario.usuario = user;
-    usuario.password = pass;
-    usuario.idPais = idPais;
+        }).then(function (data) {
 
-    PrenderLoading("Registrando usuario")
-    fetch(`${URL_BASE}usuarios.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(usuario),
-    }).then(function (response) {
-        return response.json();
+            ApagarLoading();
+            if (data.codigo == "200") {
+                MostrarToast("Usuario registrado correctamente, inicie sesion para ingresar en el sistema", 3000);
+            }
+            else if (data.codigo == "409") {
+                MostrarToast("Usuario ya se encuentra registrado, intente iniciar sesion o contactese con el adminitrador.", 3000);
+            }
+            else {
+                MostrarToast("Error", "Uppss.. ha sucedido un error inesperado, espere un momento o contactese con el administrador del sitio", data.error);
+            }
 
+        })
 
-    }).then(function (data) {
-
-        ApagarLoading();
-        if (data.codigo == "200") {
-            MostrarToast("Usuario registrado correctamente, inicie sesion para ingresar en el sistema", 3000);
-        }
-        else if (data.codigo == "409") {
-            MostrarToast("Usuario ya se encuentra registrado, intente iniciar sesion o contactese con el adminitrador.", 3000);
-        }
-        else {
-            MostrarToast("Error", "Uppss.. ha sucedido un error inesperado, espere un momento o contactese con el administrador del sitio", data.error);
-        }
-
-    })
-
-
+    }
 }
 
 //SELECT DINAMICO PAISES PARA REGISTRO
@@ -371,7 +373,7 @@ function ListarPorFecha() {
                         <ion-col> <img src="https://movetrack.develotion.com/imgs/${imagen}.png" width="40"> ${nombreAct}</ion-col>
                         <ion-col>${l.tiempo} segundos</ion-col>
                         <ion-col>${l.fecha}</ion-col>
-                        <ion-col><ion-button expand="full" onclick="EliminarActividad('${l.id}')">Eliminar</ion-button></ion-col></ion-row>
+                        <ion-col><ion-button expand="full" onclick="EliminarActividad('${l.id}')"><ion-icon slot="icon-only" name="trash"></ion-icon></ion-button></ion-col></ion-row>
                         `
                     }
 
@@ -447,34 +449,37 @@ function AgregarActividad(){
     const hoy = new Date(); 
     hoy.setHours(0, 0, 0, 0); 
 
+    if(idActividad === NaN || tiempo < 1 || fechaInput ===""){
+        MostrarToast("ERROR! CAMPOS VACIOS",3000);
+    }else{
+        if (fecha > hoy) {
+            MostrarToast("No puedes hacer actividades en el futuro / Tiempo no puede ser negativo",3000);
+        } else {
+            let actividad = new Object();
+            actividad.idActividad = idActividad;
+            actividad.idUsuario = idUser;
+            actividad.tiempo = tiempo;
+            actividad.fecha = fechaInput;
 
-    if (fecha > hoy || tiempo < 0) {
-        MostrarToast("No puedes hacer actividades en el futuro / Tiempo no puede ser negativo",3000);
-    } else {
-        let actividad = new Object();
-        actividad.idActividad = idActividad;
-        actividad.idUsuario = idUser;
-        actividad.tiempo = tiempo;
-        actividad.fecha = fechaInput;
-
-        fetch(`${URL_BASE}registros.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey' : apikey,
-                'iduser' : idUser
-            },
-            body: JSON.stringify(actividad),
-        }).then(function (response){
-                return response.json();
-            })
-            .then(function (listAct){
-                if(listAct.codigo === 401){
-                    MostrarToast("Sesion expirada", 'La sesion ha expirado. Vueldo a iniciar sesion.',3000);
-                    CerrarSesion();
-                }else{
-                    MostrarToast("Producto agregado correctamente",3000);
-                }})
+            fetch(`${URL_BASE}registros.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey' : apikey,
+                    'iduser' : idUser
+                },
+                body: JSON.stringify(actividad),
+            }).then(function (response){
+                    return response.json();
+                })
+                .then(function (listAct){
+                    if(listAct.codigo === 401){
+                        MostrarToast("Sesion expirada", 'La sesion ha expirado. Vueldo a iniciar sesion.',3000);
+                        CerrarSesion();
+                    }else{
+                        MostrarToast("Producto agregado correctamente",3000);
+                    }})
+        }
     }
 
 }
